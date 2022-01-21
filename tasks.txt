@@ -1,0 +1,4 @@
+[ ] testar enviar erro da conta
+[ ] testar abrir ordens
+[ ] testar fechar ordens
+
