@@ -4,10 +4,13 @@ ip_location = 'http://localhost:8000'
 
 def server_inform():
     send ={
-            "server": "set_01"
+            "vps_name": "set_01",
+            "multipla": "1.5",
+            "id_order": "aud"
         }
     # return(requests.post(ip_location+'/api/set_sinal',data = send))
-    return(requests.get(ip_location+'/ordenscorrent/manager/vps_01'))
+    gf = requests.post(ip_location+'/ordenscorrent/manager/vps_01',data=json.dumps(send), headers={'content-type': 'application/json'})
+    return(gf)
 
 def server_status(send):
     

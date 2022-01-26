@@ -1,4 +1,4 @@
-import MetaTrader5 as mt5
+import MetaTrader as mt5
 import time
 
 ea_magic_number = 9986989 # if you want to give every bot a unique identifier

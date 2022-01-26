@@ -1,7 +1,5 @@
-import numpy as np
-import pandas as pd
 from datetime import datetime
-import MetaTrader5 as mt5
+import MetaTrader as mt5
 import asyncio
 from API import open_trade, close_trade, get_ticket_no, close_trade_by_ticket
 import requests
@@ -9,8 +7,12 @@ import json
 import time
 from utils import creat_Object
 from requests_server import server_inform, server_status, server_err_enter_account
-
+local_mt = 'C:/Program Files/XM Global MT5/terminal64.exe'
+print('load all')
 ativite_change = ''
+account_n =''
+authorized = mt5.initialize(path=r''+local_mt, login=0, server='tes',password='tes')
+
 while True:
     time.sleep(5)
     
@@ -22,14 +24,19 @@ while True:
             continue
 
         if fd:
-            
+            print('s')
             ativite_change = fd.json()
             print(ativite_change)
             for profile in fd.json()['base']:
+                
                 server_err_enter_account(profile['account'],'work')
                 print('get information DB')
                 
-                authorized = mt5.initialize(login=profile['account'], server=profile['server_meta'],password=profile['password'])
+                if account_n != profile['account']:
+                    
+                    account_n = profile['account']
+                    authorized = mt5.initialize(path=r''+local_mt ,
+                                            login=profile['account'], server=profile['server_meta'],password=profile['password'])
                 
                 if authorized:
                     

@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
 from datetime import datetime
-import MetaTrader5 as mt5
+import MetaTrader as mt5
 import asyncio
 from API import open_trade, close_trade
 
@@ -79,4 +79,19 @@ def gf():
     result = mt5.order_send(request)
     # check the execution result
     print("1. order_send(): by {} {} lots at {} with deviation={} points".format(symbol,lot,price,deviation));
-        
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
