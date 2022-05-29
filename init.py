@@ -5,101 +5,118 @@ from API import open_trade, close_trade, get_ticket_no, close_trade_by_ticket
 import requests
 import json
 import time
-from utils import creat_Object
-from requests_server import server_inform, server_status, server_err_enter_account
+from request_graphql import run_graphql
+from utils import create_Object
+
 local_mt = 'C:/Program Files/XM Global MT5/terminal64.exe'
 print('load all')
 ativite_change = ''
 account_n =''
-authorized = mt5.initialize(path=r''+local_mt, login=0, server='tes',password='tes')
+test = mt5.initialize(path=r''+local_mt, login=0, server='tes',password='tes')
+
+
+query = """
+{
+  ordersFilterAccount(data:{
+    local:["default","pato"]
+  }){
+    id
+  	name
+    server
+    accountNumber
+    allCurrent
+    allCopyCurrent
+    finishDate
+    status
+    typeAccount
+    local
+    missingOrders{
+      id
+      status
+      ordersId
+      ticket
+      par
+      direction
+      lote
+      local
+      type
+      accountMetaTraderId
+    }
+  }
+}
+"""
+
 
 while True:
     time.sleep(5)
     
     try:
         
-    
-        fd = server_inform()
-        if ativite_change == fd.json():
-            continue
-
+        
+        fd = run_graphql(query,'query')
         if fd:
             print('s')
-            ativite_change = fd.json()
-            print(ativite_change)
-            for profile in fd.json()['base']:
+            ativite_change = fd
+         
+            for profile in fd['data']['ordersFilterAccount']:
+                print(profile)
                 
-                server_err_enter_account(profile['account'],'work')
+                
+      
                 print('get information DB')
                 
                 if account_n != profile['account']:
                     
                     account_n = profile['account']
                     authorized = mt5.initialize(path=r''+local_mt ,
-                                            login=profile['account'], server=profile['server_meta'],password=profile['password'])
+                        login=profile['account'], server=profile['server_meta'],password=profile['password'])
                 
                 if authorized:
-                    
-                    ordens_enter = { 
-                        "account":profile['account'], 
-                        "open":{
-                            "ordens_sucess" : [], 
-                            "ordens_invalid" : []
-                        },
-                        "close":{
-                            "ordens_sucess" : [], 
-                            "ordens_invalid" : []
-                        }
+                    ordersAccountGroupDefinition = { 
+                    "data":[]
                     }
                     
                     
-                    if profile['items']['open']:
-                        for ordes in profile['items']['open']:
-
-                            result, buy_request = open_trade(ordes['direction'], ordes['par'], float(ordes['lote']),0, 0, 10)
-
-                            if result != None:
-                                
-                                ordens_enter['open']['ordens_sucess'].append(creat_Object("sucess_open",result,ordes))
-                                
-                            else:
-                                ordens_enter['open']['ordens_invalid'].append(creat_Object("err_open",{},ordes))
                     
-                    if profile['items']['close']:
-                        
-                        for ordes in profile['items']['close']:
-                            print('fechar')
-                            print(ordes['ticket'])
-                            if get_ticket_no(int( ordes['ticket'])) !=0:
+                    if profile['missingOrders']:
+                        for orders in profile['missingOrders']:
 
-                                result = close_trade_by_ticket(ordes)
-                                print('result  ',result)
-                                print('------------------------------------------------------  ')
-                                if result:
-                                        
-                                    ordens_enter['close']['ordens_sucess'].append(creat_Object("sucess_close",result,ordes))
-                                    
-                                else:
-                                    print('rsdfsdfsdultsdf  22222222222222222222')
-                                    ordens_enter['close']['ordens_invalid'].append(creat_Object("err_close"),result,ordes)
-                            else:
-                                print('rsdfsdfsdultsdf  ')
-                                ordens_enter['close']['ordens_sucess'].append(creat_Object("sucess_close",{},ordes))
-                                
+                            result, buy_request = open_trade(orders['direction'], orders['par'], float(orders['lote'])/100,0, 0, 10)
+
+                            if(orders['status'] == 'OPEN'):
+
+                                if result != None:
+                                    ordersAccountGroupDefinition['data'].append(create_Object(result['ticket'],orders,'OPEN'))
+
+                            elif(orders['status'] == 'CLOSE'): 
+
+                                if get_ticket_no(int( orders['ticket'])) !=0:
+
+                                    result = close_trade_by_ticket(orders)
+                                    print('result  ',result)
+                                    print('------------------------------------------------------  ')
+                                    if result:
+                                            
+                                        ordersAccountGroupDefinition['data'].append(create_Object(result['ticket'],orders,'CLOSE'))
+                                        print('rsdfsdfsdultsdf  ')
+                        result = run_graphql(
+                            f""" mutation
+                            {'{'}
+                                ordersAccountGroupDefinition(
+                                {ordersAccountGroupDefinition}
+                                ){'{'}
+                                    field
+                                    message
+                                {'}'}
+                            {'}'}
+                            """,'mutation')
+                        print('result   ',result)
                     safe = 5
-                    while True:
-                        print(ordens_enter)
-                        new_server_status = server_status(ordens_enter)
-                        print(new_server_status)
-                        if (new_server_status != None and new_server_status != "err"):
-                            break
-                        
-                        safe +=1
-                        time.sleep(safe)
+
                 else:
-                    
-                    server_err_enter_account(profile['account'],str("failed to connect at account #{}, error code: {}"+str(mt5.last_error())))
+                    #FIXME report is wrong login
                     print("failed to connect at account #{}, error code: {}",mt5.last_error())
-    except:
-        pass
+
+    except Exception as inst:
+        print('Erro ',inst)
 
