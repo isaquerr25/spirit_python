@@ -104,7 +104,7 @@ while True:
                                             ordersAccountGroupDefinition['data'].append(create_Object(result,orders,'CLOSE'))
                                             print('rsdfsdfsdultsdf  ')
                             result = run_graphql(
-                                f""" mutation
+                                f"""
                                 {'{'}
                                     ordersAccountGroupDefinition(
                                     {ordersAccountGroupDefinition}
