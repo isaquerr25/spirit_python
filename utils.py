@@ -15,4 +15,5 @@ def create_Object(ticket,f_orders={},statusCurrent=''):
         "type":f_orders['type'],
         "accountMetaTraderId":f_orders['accountMetaTraderId'],
         }
+    print('order_process  ______))))____>',order_process)
     return(order_process)
