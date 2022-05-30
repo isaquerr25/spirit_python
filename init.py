@@ -30,6 +30,7 @@ query = """
     status
     typeAccount
     local
+    password
     missingOrders{
       id
       status
