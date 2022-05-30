@@ -116,9 +116,9 @@ while True:
                     else:
                         #FIXME report is wrong login
                         print("failed to connect at account #{}, error code: {}",mt5.last_error())
-                        
+
                 except Exception as inst:
-                    print('Erro ',inst)
+                    print('E111rro ',inst)
     except Exception as inst:
         print('Erro ',inst)
 
