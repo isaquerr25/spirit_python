@@ -68,7 +68,7 @@ while True:
                     if account_n != profile['account']:
                         
                         account_n = profile['account']
-                        print(account_n)
+                        print('account_n:>',account_n)
                         authorized = mt5.initialize(path=r''+local_mt ,
                             login=profile['account'], server=profile['server_meta'],password=profile['password'])
                     
