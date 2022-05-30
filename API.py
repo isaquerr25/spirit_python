@@ -60,10 +60,10 @@ def close_trade(action, buy_request, result, deviation):
         print(f"Failed to select {symbol}, error code =",mt5.last_error())
     else:
         symbol = buy_request['symbol']
-        if action == 'buy':
+        if action == 'BUY':
             trade_type = mt5.ORDER_TYPE_BUY
             price = mt5.symbol_info_tick(symbol).ask
-        elif action =='sell':
+        elif action =='SELL':
             trade_type = mt5.ORDER_TYPE_SELL
             price = mt5.symbol_info_tick(symbol).bid
         position_id=result.order
