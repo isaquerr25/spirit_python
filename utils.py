@@ -10,7 +10,6 @@ def create_Object(orderCreate,f_orders={},statusCurrent=''):
         "ticket":orderCreate.order,
         "direction": f_orders['direction'],
         "lote":f_orders['lote'],
-        "ticket_old":f_orders['ticket_old'],
         "status":statusCurrent,
         "local":f_orders['local'],
         "type":f_orders['type'],
