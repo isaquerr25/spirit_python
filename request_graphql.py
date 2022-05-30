@@ -1,4 +1,4 @@
-request_url = 'http://192.168.1.66:4000/graphql' 
+request_url = 'http://192.168.1.67:4000/graphql' 
 
 graphql_query = """{
   ordersFilterAccount(data:{
