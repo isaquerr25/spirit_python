@@ -70,7 +70,7 @@ while True:
                         account_n = profile['accountNumber']
                         print('account_n:>',account_n)
                         authorized = mt5.initialize(path=r''+local_mt ,
-                            login=profile['account'], server=profile['server'],password=profile['password'])
+                            login=account_n, server=profile['server'],password=profile['password'])
                     
                     if authorized:
                         ordersAccountGroupDefinition = { 
