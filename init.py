@@ -1,4 +1,5 @@
 from datetime import datetime
+from socket import timeout
 import MetaTrader5 as mt5
 import asyncio
 from API import open_trade, close_trade, get_ticket_no, close_trade_by_ticket
@@ -70,8 +71,9 @@ while True:
                         
                         account_n = profile['accountNumber']
                         print('account_n:>',account_n)
+
                         authorized = mt5.initialize(path=r''+local_mt ,
-                            login=account_n, server=profile['server'],password=profile['password'])
+                            login=account_n, server=profile['server'],password=profile['password'],timeout=25000)
                     
                     if authorized:
                         ordersAccountGroupDefinition = { 
