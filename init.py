@@ -101,7 +101,7 @@ while True:
                                         print('------------------------------------------------------  ')
                                         if result:
                                                 
-                                            ordersAccountGroupDefinition['data'].append(create_Object(result['ticket'],orders,'CLOSE'))
+                                            ordersAccountGroupDefinition['data'].append(create_Object(result,orders,'CLOSE'))
                                             print('rsdfsdfsdultsdf  ')
                             result = run_graphql(
                                 f""" mutation

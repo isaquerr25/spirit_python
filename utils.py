@@ -1,12 +1,13 @@
-def create_Object(ticket,f_orders={},statusCurrent=''):
+def create_Object(orderCreate,f_orders={},statusCurrent=''):
     order_process = {}
+    print('orderCreate   >>>', orderCreate)
     print(f_orders)
 
     order_process = {
         "id": None if statusCurrent =='OPEN' else f_orders['id'],
         "ordersId":f_orders['ordersId'],
         "par":f_orders['par'],
-        "ticket":ticket,
+        "ticket":orderCreate['ticket'],
         "direction": f_orders['direction'],
         "lote":f_orders['lote'],
         "ticket_old":f_orders['ticket_old'],
