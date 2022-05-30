@@ -19,75 +19,34 @@ def open_trade(action, symbol, lot, sl_points, tp_points, deviation):
     if not selected:
         print(f"Failed to select {symbol}, error code =",mt5.last_error())
     else:
-        symbol_info = get_info(symbol)
         print('entro')
         try:
-            
-            trade_type = mt5.ORDER_TYPE_BUY
             price = mt5.symbol_info_tick(symbol).ask
-            point = mt5.symbol_info(symbol).point
-
+            
             buy_request = {
-            "action": mt5.TRADE_ACTION_DEAL if action == 'BUY' else mt5.ORDER_TYPE_SELL ,
-            "symbol": symbol,
-            "volume": lot,
-            "type": mt5.ORDER_TYPE_BUY,
-            "price": price,
-            # "sl": price - 100 * point,
-
-            # "tp": price + 100 * point,
-
-            "deviation": deviation,
-            "magic": 234000,
-            "comment": "python script open",
+                "action": mt5.TRADE_ACTION_DEAL,
+                "symbol": symbol,
+                "volume": lot,
+                "type": mt5.ORDER_TYPE_BUY if action == 'BUY' else mt5.ORDER_TYPE_SELL,
+                "price": price,
+                "deviation": deviation,
+                "magic": 234000,
+                "comment": "python script open",
+                "type_time": mt5.ORDER_TIME_GTC,
+                "type_filling": mt5.ORDER_FILLING_RETURN,
                 }
+            
             result = mt5.order_send(buy_request) 
             return result, buy_request 
 
-
         except Exception as inst:
-                traceback.print_exc()
-
-def close_trade(action, buy_request, result, deviation):
-    '''https://www.mql5.com/en/docs/integration/python_metatrader5/mt5ordersend_py
-    '''
-    # create a close request
-    # orders=mt5.orders_total()
-    # buy_request = {}
-    # for find_ordens in orders:
-    #     if ticket_py = find_ordens.
-    selected=mt5.symbol_select(symbol,True)
-    if not selected:
-        print(f"Failed to select {symbol}, error code =",mt5.last_error())
-    else:
-        symbol = buy_request['symbol']
-        if action == 'BUY':
-            trade_type = mt5.ORDER_TYPE_BUY
-            price = mt5.symbol_info_tick(symbol).ask
-        elif action =='SELL':
-            trade_type = mt5.ORDER_TYPE_SELL
-            price = mt5.symbol_info_tick(symbol).bid
+            traceback.print_exc()
+            print(inst)
             
-        position_id=result.order
-        lot = buy_request['volume']
+def close_trade(ticket, symbol):
 
-        close_request={
-            "action": mt5.TRADE_ACTION_DEAL,
-            "symbol": symbol,
-            "volume": lot,
-            "type": trade_type,
-            "position": position_id,
-            "price": price,
-            "deviation": deviation,
-            "magic": ea_magic_number,
-            "comment": "python script close",
-            "type_time": mt5.ORDER_TIME_GTC, # good till cancelled
-            "type_filling": mt5.ORDER_FILLING_RETURN,
-        }
-        # send a close request
-        result=mt5.order_send(close_request)
-
-
+    return mt5.Close(symbol,ticket=ticket)
+   
 # This is how I would execute the order
 
 
@@ -148,7 +107,7 @@ def get_ticket_return_list(ticket):
         lst = list(symmbol_positions)
         for list_orders in lst:
             if list_orders[0] == ticket:                
-                return list_orders
+                 return list_orders
     return 0
 
 

@@ -76,7 +76,7 @@ while True:
                             login=account_n, server=profile['server'],password=profile['password'],timeout=25000)
                     
                     if authorized:
-                        ordersAccountGroupDefinition =  "data":[]
+                        ordersAccountGroupDefinition = {"data":[]}
                         
                         
                         
@@ -94,7 +94,7 @@ while True:
 
                                     if get_ticket_no(int( orders['ticket'])) !=0:
 
-                                        result = close_trade_by_ticket(orders)
+                                        result = close_trade(orders['ticket'],orders['par'])
                                         print('result  ',result)
                                         print('------------------------------------------------------  ')
                                         if result:
@@ -104,8 +104,8 @@ while True:
                             result = run_graphql(
                                 f"""
                                 {'{'}
-                                    ordersAccountGroupDefinition(
-                                    {ordersAccountGroupDefinition}
+                                    ordersAccountGroupDefinition(data:
+                                    {ordersAccountGroupDefinition['data']}
                                     ){'{'}
                                         field
                                         message
