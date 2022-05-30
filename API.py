@@ -23,53 +23,27 @@ def open_trade(action, symbol, lot, sl_points, tp_points, deviation):
         print('entro')
         try:
             
-            if action == 'buy':
-                trade_type = mt5.ORDER_TYPE_BUY
-                price = mt5.symbol_info_tick(symbol).ask
-                point = mt5.symbol_info(symbol).point
+            trade_type = mt5.ORDER_TYPE_BUY
+            price = mt5.symbol_info_tick(symbol).ask
+            point = mt5.symbol_info(symbol).point
 
-                buy_request = {
-                "action": mt5.TRADE_ACTION_DEAL,
-                "symbol": symbol,
-                "volume": lot,
-                "type": mt5.ORDER_TYPE_BUY,
-                "price": price,
-                # "sl": price - 100 * point,
+            buy_request = {
+            "action": mt5.TRADE_ACTION_DEAL if action == 'BUY' else mt5.ORDER_TYPE_SELL ,
+            "symbol": symbol,
+            "volume": lot,
+            "type": mt5.ORDER_TYPE_BUY,
+            "price": price,
+            # "sl": price - 100 * point,
 
-                # "tp": price + 100 * point,
+            # "tp": price + 100 * point,
 
-                "deviation": deviation,
-                "magic": 234000,
-                "comment": "python script open",
-                    }
-                result = mt5.order_send(buy_request) 
-                return result, buy_request 
+            "deviation": deviation,
+            "magic": 234000,
+            "comment": "python script open",
+                }
+            result = mt5.order_send(buy_request) 
+            return result, buy_request 
 
-            elif action =='sell':
-                trade_type = mt5.ORDER_TYPE_SELL
-                price = mt5.symbol_info_tick(symbol).bid
-                point = mt5.symbol_info(symbol).point
-                print('enssstro')
-                buy_request = {
-                "action": mt5.TRADE_ACTION_DEAL,
-                "symbol": symbol,
-                "volume": lot,
-                "type": mt5.ORDER_TYPE_BUY,
-                "price": price,
-                # "sl": price - 100 * point,
-
-                # "tp": price + 100 * point,
-
-                "deviation": deviation,
-                "magic": 234000,
-                "comment": "python script open",
-                    }
-                # send a trading request
-                print('en4444444o')
-                print('buy_request ===+ ',buy_request)
-                result = mt5.order_send(buy_request)      
-                print('en4444444555555o')
-                return result, buy_request 
 
         except Exception as inst:
                 traceback.print_exc()
