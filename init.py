@@ -84,7 +84,7 @@ while True:
                         
                         if profile['missingOrders']:
                             for orders in profile['missingOrders']:
-
+                                print('pre order :::> ',orders['direction'], orders['par'], float(orders['lote'])/100,0, 0, 10)
                                 result, buy_request = open_trade(orders['direction'], orders['par'], float(orders['lote'])/100,0, 0, 10)
 
                                 if(orders['status'] == 'OPEN'):
