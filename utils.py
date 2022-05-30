@@ -7,7 +7,7 @@ def create_Object(orderCreate,f_orders={},statusCurrent=''):
         "id": None if statusCurrent =='OPEN' else f_orders['id'],
         "ordersId":f_orders['ordersId'],
         "par":f_orders['par'],
-        "ticket":orderCreate['ticket'],
+        "ticket":orderCreate.orderCreate,
         "direction": f_orders['direction'],
         "lote":f_orders['lote'],
         "ticket_old":f_orders['ticket_old'],
