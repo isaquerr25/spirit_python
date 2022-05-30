@@ -7,7 +7,7 @@ import json
 import time
 from request_graphql import run_graphql
 from utils import create_Object
-
+import traceback
 local_mt = 'C:\Program Files\XM Global MT5/terminal64.exe'
 print('load all')
 ativite_change = ''
@@ -120,6 +120,7 @@ while True:
                         print("failed to connect at account #{}, error code: {}",mt5.last_error())
 
                 except Exception as inst:
+                    traceback.print_exc()
                     print('E111rro ',inst)
     except Exception as inst:
         print('Erro ',inst)
