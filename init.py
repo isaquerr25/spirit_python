@@ -62,61 +62,63 @@ while True:
                 print(profile)
                 
                 
-      
-                print('get information DB')
-                
-                if account_n != profile['account']:
+                try:
+                    print('get information DB')
                     
-                    account_n = profile['account']
-                    authorized = mt5.initialize(path=r''+local_mt ,
-                        login=profile['account'], server=profile['server_meta'],password=profile['password'])
-                
-                if authorized:
-                    ordersAccountGroupDefinition = { 
-                    "data":[]
-                    }
+                    if account_n != profile['account']:
+                        
+                        account_n = profile['account']
+                        authorized = mt5.initialize(path=r''+local_mt ,
+                            login=profile['account'], server=profile['server_meta'],password=profile['password'])
                     
-                    
-                    
-                    if profile['missingOrders']:
-                        for orders in profile['missingOrders']:
+                    if authorized:
+                        ordersAccountGroupDefinition = { 
+                        "data":[]
+                        }
+                        
+                        
+                        
+                        if profile['missingOrders']:
+                            for orders in profile['missingOrders']:
 
-                            result, buy_request = open_trade(orders['direction'], orders['par'], float(orders['lote'])/100,0, 0, 10)
+                                result, buy_request = open_trade(orders['direction'], orders['par'], float(orders['lote'])/100,0, 0, 10)
 
-                            if(orders['status'] == 'OPEN'):
+                                if(orders['status'] == 'OPEN'):
 
-                                if result != None:
-                                    ordersAccountGroupDefinition['data'].append(create_Object(result['ticket'],orders,'OPEN'))
+                                    if result != None:
+                                        ordersAccountGroupDefinition['data'].append(create_Object(result['ticket'],orders,'OPEN'))
 
-                            elif(orders['status'] == 'CLOSE'): 
+                                elif(orders['status'] == 'CLOSE'): 
 
-                                if get_ticket_no(int( orders['ticket'])) !=0:
+                                    if get_ticket_no(int( orders['ticket'])) !=0:
 
-                                    result = close_trade_by_ticket(orders)
-                                    print('result  ',result)
-                                    print('------------------------------------------------------  ')
-                                    if result:
-                                            
-                                        ordersAccountGroupDefinition['data'].append(create_Object(result['ticket'],orders,'CLOSE'))
-                                        print('rsdfsdfsdultsdf  ')
-                        result = run_graphql(
-                            f""" mutation
-                            {'{'}
-                                ordersAccountGroupDefinition(
-                                {ordersAccountGroupDefinition}
-                                ){'{'}
-                                    field
-                                    message
+                                        result = close_trade_by_ticket(orders)
+                                        print('result  ',result)
+                                        print('------------------------------------------------------  ')
+                                        if result:
+                                                
+                                            ordersAccountGroupDefinition['data'].append(create_Object(result['ticket'],orders,'CLOSE'))
+                                            print('rsdfsdfsdultsdf  ')
+                            result = run_graphql(
+                                f""" mutation
+                                {'{'}
+                                    ordersAccountGroupDefinition(
+                                    {ordersAccountGroupDefinition}
+                                    ){'{'}
+                                        field
+                                        message
+                                    {'}'}
                                 {'}'}
-                            {'}'}
-                            """,'mutation')
-                        print('result   ',result)
-                    safe = 5
+                                """,'mutation')
+                            print('result   ',result)
+                        safe = 5
 
-                else:
-                    #FIXME report is wrong login
-                    print("failed to connect at account #{}, error code: {}",mt5.last_error())
-
+                    else:
+                        #FIXME report is wrong login
+                        print("failed to connect at account #{}, error code: {}",mt5.last_error())
+                        
+                except Exception as inst:
+                    print('Erro ',inst)
     except Exception as inst:
         print('Erro ',inst)
 
