@@ -14,34 +14,38 @@ def open_trade(action, symbol, lot, sl_points, tp_points, deviation):
     '''https://www.mql5.com/en/docs/integration/python_metatrader5/mt5ordersend_py
     '''
     # prepare the buy request structure
-    symbol_info = get_info(symbol)
+    selected=mt5.symbol_select(symbol,True)
+    if not selected:
+        print(f"Failed to select {symbol}, error code =",mt5.last_error())
+    else:
+        symbol_info = get_info(symbol)
 
-    if action == 'buy':
-        trade_type = mt5.ORDER_TYPE_BUY
-        price = mt5.symbol_info_tick(symbol).ask
-    elif action =='sell':
-        trade_type = mt5.ORDER_TYPE_SELL
-        price = mt5.symbol_info_tick(symbol).bid
-    point = mt5.symbol_info(symbol).point
+        if action == 'buy':
+            trade_type = mt5.ORDER_TYPE_BUY
+            price = mt5.symbol_info_tick(symbol).ask
+        elif action =='sell':
+            trade_type = mt5.ORDER_TYPE_SELL
+            price = mt5.symbol_info_tick(symbol).bid
+        point = mt5.symbol_info(symbol).point
 
-    buy_request = {
-    "action": mt5.TRADE_ACTION_DEAL,
-    "symbol": symbol,
-    "volume": lot,
-    "type": mt5.ORDER_TYPE_BUY,
-    "price": price,
-    # "sl": price - 100 * point,
+        buy_request = {
+        "action": mt5.TRADE_ACTION_DEAL,
+        "symbol": symbol,
+        "volume": lot,
+        "type": mt5.ORDER_TYPE_BUY,
+        "price": price,
+        # "sl": price - 100 * point,
 
-    # "tp": price + 100 * point,
+        # "tp": price + 100 * point,
 
-    "deviation": deviation,
-    "magic": 234000,
-    "comment": "python script open",
-        }
-    # send a trading request
+        "deviation": deviation,
+        "magic": 234000,
+        "comment": "python script open",
+            }
+        # send a trading request
 
-    result = mt5.order_send(buy_request)      
-    return result, buy_request 
+        result = mt5.order_send(buy_request)      
+        return result, buy_request 
 
 def close_trade(action, buy_request, result, deviation):
     '''https://www.mql5.com/en/docs/integration/python_metatrader5/mt5ordersend_py
@@ -51,31 +55,35 @@ def close_trade(action, buy_request, result, deviation):
     # buy_request = {}
     # for find_ordens in orders:
     #     if ticket_py = find_ordens.
-    symbol = buy_request['symbol']
-    if action == 'buy':
-        trade_type = mt5.ORDER_TYPE_BUY
-        price = mt5.symbol_info_tick(symbol).ask
-    elif action =='sell':
-        trade_type = mt5.ORDER_TYPE_SELL
-        price = mt5.symbol_info_tick(symbol).bid
-    position_id=result.order
-    lot = buy_request['volume']
+    selected=mt5.symbol_select(symbol,True)
+    if not selected:
+        print(f"Failed to select {symbol}, error code =",mt5.last_error())
+    else:
+        symbol = buy_request['symbol']
+        if action == 'buy':
+            trade_type = mt5.ORDER_TYPE_BUY
+            price = mt5.symbol_info_tick(symbol).ask
+        elif action =='sell':
+            trade_type = mt5.ORDER_TYPE_SELL
+            price = mt5.symbol_info_tick(symbol).bid
+        position_id=result.order
+        lot = buy_request['volume']
 
-    close_request={
-        "action": mt5.TRADE_ACTION_DEAL,
-        "symbol": symbol,
-        "volume": lot,
-        "type": trade_type,
-        "position": position_id,
-        "price": price,
-        "deviation": deviation,
-        "magic": ea_magic_number,
-        "comment": "python script close",
-        "type_time": mt5.ORDER_TIME_GTC, # good till cancelled
-        "type_filling": mt5.ORDER_FILLING_RETURN,
-    }
-    # send a close request
-    result=mt5.order_send(close_request)
+        close_request={
+            "action": mt5.TRADE_ACTION_DEAL,
+            "symbol": symbol,
+            "volume": lot,
+            "type": trade_type,
+            "position": position_id,
+            "price": price,
+            "deviation": deviation,
+            "magic": ea_magic_number,
+            "comment": "python script close",
+            "type_time": mt5.ORDER_TIME_GTC, # good till cancelled
+            "type_filling": mt5.ORDER_FILLING_RETURN,
+        }
+        # send a close request
+        result=mt5.order_send(close_request)
 
 
 # This is how I would execute the order
