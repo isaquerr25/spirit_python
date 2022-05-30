@@ -1,5 +1,5 @@
 from datetime import datetime
-import MetaTrader as mt5
+import MetaTrader5 as mt5
 import asyncio
 from API import open_trade, close_trade, get_ticket_no, close_trade_by_ticket
 import requests
@@ -8,7 +8,7 @@ import time
 from request_graphql import run_graphql
 from utils import create_Object
 
-local_mt = 'C:/Program Files/XM Global MT5/terminal64.exe'
+local_mt = 'C:\Program Files\XM Global MT5/terminal64.exe'
 print('load all')
 ativite_change = ''
 account_n =''

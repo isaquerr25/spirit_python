@@ -1,4 +1,4 @@
-request_url = 'http://localhost:4000/graphql' 
+request_url = 'http://192.168.1.66:4000/graphql' 
 
 graphql_query = """{
   ordersFilterAccount(data:{
@@ -38,7 +38,7 @@ headers = {"Authorization": "Bearer YOUR API KEY"}
 
 
 def run_graphql(query,type): # A simple function to use requests.post to make the API call. Note the json= section.
-    request = requests.post('http://localhost:4000/graphql', json={type: query}, headers=headers)
+    request = requests.post(request_url, json={type: query}, headers=headers)
     if request.status_code == 200:
         return request.json()
     else:
