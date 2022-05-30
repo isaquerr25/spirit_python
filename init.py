@@ -65,12 +65,12 @@ while True:
                 try:
                     print('get information DB')
                     
-                    if account_n != profile['account']:
+                    if account_n != profile['accountNumber']:
                         
-                        account_n = profile['account']
+                        account_n = profile['accountNumber']
                         print('account_n:>',account_n)
                         authorized = mt5.initialize(path=r''+local_mt ,
-                            login=profile['account'], server=profile['server_meta'],password=profile['password'])
+                            login=profile['account'], server=profile['server'],password=profile['password'])
                     
                     if authorized:
                         ordersAccountGroupDefinition = { 
