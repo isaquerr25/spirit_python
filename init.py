@@ -112,8 +112,8 @@ while True:
                                         field
                                         message
                                     {'}'}
-                                {'}'}
-                                """,'mutation')
+                                {'}'} 
+                                """,'mutation') 
                             print('result   ',result)
                         safe = 5
 
