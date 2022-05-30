@@ -76,9 +76,7 @@ while True:
                             login=account_n, server=profile['server'],password=profile['password'],timeout=25000)
                     
                     if authorized:
-                        ordersAccountGroupDefinition = { 
-                        "data":[]
-                        }
+                        ordersAccountGroupDefinition =  "data":[]
                         
                         
                         
