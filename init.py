@@ -90,7 +90,7 @@ while True:
                                 if(orders['status'] == 'OPEN'):
 
                                     if result != None:
-                                        ordersAccountGroupDefinition['data'].append(create_Object(result['ticket'],orders,'OPEN'))
+                                        ordersAccountGroupDefinition['data'].append(create_Object(result,orders,'OPEN'))
 
                                 elif(orders['status'] == 'CLOSE'): 
 
