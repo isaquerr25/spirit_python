@@ -23,29 +23,48 @@ def open_trade(action, symbol, lot, sl_points, tp_points, deviation):
         if action == 'buy':
             trade_type = mt5.ORDER_TYPE_BUY
             price = mt5.symbol_info_tick(symbol).ask
+            point = mt5.symbol_info(symbol).point
+
+            buy_request = {
+            "action": mt5.TRADE_ACTION_DEAL,
+            "symbol": symbol,
+            "volume": lot,
+            "type": mt5.ORDER_TYPE_BUY,
+            "price": price,
+            # "sl": price - 100 * point,
+
+            # "tp": price + 100 * point,
+
+            "deviation": deviation,
+            "magic": 234000,
+            "comment": "python script open",
+                }
+            result = mt5.order_send(buy_request) 
+            return result, buy_request 
+
         elif action =='sell':
             trade_type = mt5.ORDER_TYPE_SELL
             price = mt5.symbol_info_tick(symbol).bid
-        point = mt5.symbol_info(symbol).point
+            point = mt5.symbol_info(symbol).point
 
-        buy_request = {
-        "action": mt5.TRADE_ACTION_DEAL,
-        "symbol": symbol,
-        "volume": lot,
-        "type": mt5.ORDER_TYPE_BUY,
-        "price": price,
-        # "sl": price - 100 * point,
+            buy_request = {
+            "action": mt5.TRADE_ACTION_DEAL,
+            "symbol": symbol,
+            "volume": lot,
+            "type": mt5.ORDER_TYPE_BUY,
+            "price": price,
+            # "sl": price - 100 * point,
 
-        # "tp": price + 100 * point,
+            # "tp": price + 100 * point,
 
-        "deviation": deviation,
-        "magic": 234000,
-        "comment": "python script open",
-            }
-        # send a trading request
+            "deviation": deviation,
+            "magic": 234000,
+            "comment": "python script open",
+                }
+            # send a trading request
 
-        result = mt5.order_send(buy_request)      
-        return result, buy_request 
+            result = mt5.order_send(buy_request)      
+            return result, buy_request 
 
 def close_trade(action, buy_request, result, deviation):
     '''https://www.mql5.com/en/docs/integration/python_metatrader5/mt5ordersend_py
@@ -66,6 +85,7 @@ def close_trade(action, buy_request, result, deviation):
         elif action =='SELL':
             trade_type = mt5.ORDER_TYPE_SELL
             price = mt5.symbol_info_tick(symbol).bid
+            
         position_id=result.order
         lot = buy_request['volume']
 
