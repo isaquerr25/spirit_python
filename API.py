@@ -20,7 +20,7 @@ def open_trade(action, symbol, lot, sl_points, tp_points, deviation):
         print(f"Failed to select {symbol}, error code =",mt5.last_error())
     else:
         symbol_info = get_info(symbol)
-
+        print('entro')
         try:
             
             if action == 'buy':
