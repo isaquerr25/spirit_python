@@ -53,26 +53,23 @@ mutation = gql(
     """
 )
 
-# get all info need in server
-
 
 def getInfoDef():
     try:
         result = client.execute(query, variable_values={
             "data": envFile['localReference']})
+        print(result)
         return result
     except:
-        print('getInfoDef error')
         traceback.print_exc()
         return None
-
-# send order to db
 
 
 def setOrders(data):
     try:
         result = client.execute(mutation, variable_values={
             "data": data})
+        print(result)
         return result
     except:
         print('setOrders error')
@@ -80,11 +77,9 @@ def setOrders(data):
         return None
 
 
-# Scheme to send to create new order in db
-# data = [{'id': None, 'ordersId': 38, 'par': 'XAUUSD', 'ticket': 15611515, 'direction': 'BUY', 'lote': 10,
-#        'status': 'OPEN', 'local': 'default', 'type': 'NORMAL', 'accountMetaTraderId': 7}]
+data = [{'id': None, 'ordersId': 38, 'par': 'XAUUSD', 'ticket': 15611515, 'direction': 'BUY', 'lote': 10,
+        'status': 'OPEN', 'local': 'default', 'type': 'NORMAL', 'accountMetaTraderId': 7}]
 
-#
-# getInfoDef()
 
-# setOrders(data)
+getInfoDef()
+setOrders(data)

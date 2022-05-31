@@ -1,0 +1,415 @@
+type Query {
+  invoiceObjects: [ObjectInvoices!]
+  allUsers: [UserAll!]
+  loteAutoCalculateAll: [ObjectLoteAutoCalculate!]
+  accountMetaTraderObjects: [ObjectAccountMetaTrader!]
+  ordersFilterAccount(data: ObjectFilterAccountOrders!): [ObjectAccountFilterAccount!]
+  planInvoicesAll: [ObjectPlanInvoices!]
+  ordersAll: [ObjectOrders!]
+  ordersAccountAll: [ObjectOrdersAccounts!]
+}
+
+type ObjectInvoices {
+  id: Int
+  valueDollar: Int
+  valueReal: Int
+  dollarQuote: Int
+  percentProfit: Int
+  percentFess: Int
+  percentAffiliated: Int
+  status: InvoicesEnum!
+  createdAt: DateTime
+  paymenbeginDate: DateTime
+  paymentDate: DateTime
+  updatedAt: DateTime
+  metaTraderRefr: ObjectAccountMetaTrader
+  PaymentProof: DateTime
+}
+
+enum InvoicesEnum {
+  WAIT_PAYMENT
+  DOCUMENT_SEND_INVALID
+  LATE_INVOICES
+  PROCESS
+  PAID_OUT
+  CANCEL
+}
+
+"""
+The javascript `Date` as string. Type represents date and time as the ISO Date string.
+"""
+scalar DateTime
+
+type ObjectAccountMetaTrader {
+  id: Int
+  name: String
+  server: String
+  balance: Int
+  balanceCredit: Int
+  accountNumber: Int
+  status: String
+  finishDate: DateTime
+}
+
+type UserAll {
+  id: Int!
+  email: String!
+  name: String
+  wallet: String
+  numberTelephone: String
+}
+
+type ObjectLoteAutoCalculate {
+  id: Int
+  minCapital: Int
+  maxCapital: Int
+  maxLot: Int
+  minLot: Int
+  local: String
+  valueBase: Int
+  type: LoteAutoCalculateDangerEnum
+  styleMath: styleEnum
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+enum LoteAutoCalculateDangerEnum {
+  LOW
+  NORMAL
+  AGGRESSIVE
+  DEFAULT
+}
+
+enum styleEnum {
+  FIX
+  MULTIPLY_2
+  MULTIPLY_1_1
+  MULTIPLY_1_2
+  MULTIPLY_1_3
+  MULTIPLY_1_4
+  MULTIPLY_1_5
+}
+
+type ObjectAccountFilterAccount {
+  id: Int
+  finishDate: DateTime
+  name: String
+  password: String
+  server: String
+  balance: Int
+  balanceCredit: Int
+  accountNumber: Int
+  status: String
+  typeAccount: String
+  allCurrent: Int
+  allCopyCurrent: Int
+  local: [String!]
+  missingOrders: [ObjectGroupSimpleOrder!]
+}
+
+type ObjectGroupSimpleOrder {
+  ordersId: Int
+  id: Int
+  ticket: Int
+  par: String
+  direction: OrdersDirectionEnum
+  lote: Int
+  local: String
+  status: OrdersStatusEnum
+  type: OrdersTypeEnum
+  accountMetaTraderId: Int
+}
+
+enum OrdersDirectionEnum {
+  BUY
+  SELL
+}
+
+enum OrdersStatusEnum {
+  CLOSE
+  OPEN
+  PROBLEM
+}
+
+enum OrdersTypeEnum {
+  NORMAL
+  SPECIAL
+  CORRECTION
+}
+
+input ObjectFilterAccountOrders {
+  local: [String!]!
+}
+
+type ObjectPlanInvoices {
+  id: Int
+  beginDate: DateTime
+  finishDate: DateTime
+  realDollarQuote: Int
+  createdAt: DateTime
+  updatedAt: DateTime
+  accountNumber: Int
+  grossProfitDollar: Int
+  profitDollar: Int
+  affiliatedProfitDollar: Int
+  type: PlanInvoicesTypeEnum!
+  status: PlanInvoicesStatusEnum!
+}
+
+enum PlanInvoicesTypeEnum {
+  ALL
+  SPECIFIC_ACCOUNT
+}
+
+enum PlanInvoicesStatusEnum {
+  OPEN
+  COMPLETE
+}
+
+type ObjectOrders {
+  id: Int
+  par: String
+  direction: OrdersDirectionEnum
+  lote: Int
+  ticket: Int
+  local: String
+  type: OrdersTypeEnum
+  status: OrdersStatusEnum
+  OrdersAccount: [ObjectOrdersAccounts!]
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+type ObjectOrdersAccounts {
+  id: Int
+  par: String
+  direction: OrdersDirectionEnum
+  lote: Int
+  ticket: Int
+  local: String
+  type: OrdersTypeEnum
+  refAccount: ObjectAccountMetaTrader
+  refOriginalOrder: ObjectOrders
+  status: OrdersStatusEnum
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+type Mutation {
+  invoiceCreate(res: [InputNewInvoices!]!): [GraphState!]!
+  createUserResolver(data: CreateUser!): [GraphState!]!
+  loginAuthUser(data: LoginUser!): [GraphState!]!
+  updateAuthPassword(data: PasswordAlter!): GraphState
+  updateNumberTelephone(data: NumberTelephoneAlter!): GraphState
+  logout: Boolean
+  resolverForgetPassword(data: ForgetPasswordAlter!): GraphState
+  newPassword(data: ForgetPasswordNewAlter!): GraphState
+  loginStaff(data: LoginUser!): [GraphState!]!
+  loteAutoCalculateCreate(data: InputNewLoteAutoCalculate!): [GraphState!]!
+  loteAutoCalculateUpdate(data: InputUpdateLoteAutoCalculate!): [GraphState!]!
+  loteAutoCalculateDelete(data: InputDeleteLoteAutoCalculate!): [GraphState!]!
+  accountMetaTraderCreate(data: InputNewAccountMetaTrader!): [GraphState!]!
+  accountMetaTraderUpdate(data: InputChangeAccountMetaTrader!): GraphState
+  accountMetaTraderDelete(data: InputDeleteAccountMetaTrader!): GraphState!
+  accountMetaTraderStopWork(data: InputStopWorkAccountMetaTrader!): GraphState!
+  planInvoicesCreate(data: InputNewPlanInvoices!): [GraphState!]!
+  planInvoicesUpdate(data: InputUpdatePlanInvoices!): [GraphState!]!
+  ordersCreate(data: InputNewtOrders!): [GraphState!]!
+  ordersUpdate(data: InputUpdateOrders!): [GraphState!]!
+  ordersDelete(data: InputDeleteOrders!): [GraphState!]!
+  ordersAccountCreate(data: InputNewtOrdersAccounts!): [GraphState!]!
+  ordersAccountUpdate(data: InputUpdateOrdersAccounts!): [GraphState!]!
+  ordersAccountDelete(data: InputDeleteOrdersAccounts!): [GraphState!]!
+  ordersAccountGroupDefinition(data: [InputOrdersAccountGroupDefinition!]!): [GraphState!]
+}
+
+type GraphState {
+  field: String
+  message: String
+}
+
+input InputNewInvoices {
+  accountNumber: Int
+  profit: Int!
+  capital: Int!
+  planInvoicesId: Int
+}
+
+input CreateUser {
+  email: String!
+  name: String!
+  password: String!
+}
+
+input LoginUser {
+  email: String!
+  password: String!
+}
+
+input PasswordAlter {
+  oldPassword: String!
+  password: String!
+}
+
+input NumberTelephoneAlter {
+  numberTelephone: String!
+}
+
+input ForgetPasswordAlter {
+  email: String!
+}
+
+input ForgetPasswordNewAlter {
+  token: String!
+  password: String!
+}
+
+input InputNewLoteAutoCalculate {
+  minCapital: Int!
+  maxCapital: Int!
+  maxLot: Int
+  minLot: Int
+  local: String!
+  valueBase: Int!
+  type: LoteAutoCalculateDangerEnum!
+  styleMath: styleEnum!
+}
+
+input InputUpdateLoteAutoCalculate {
+  id: Int!
+  minCapital: Int
+  maxCapital: Int
+  maxLot: Int
+  minLot: Int
+  local: String
+  valueBase: Int
+  type: LoteAutoCalculateDangerEnum
+  styleMath: styleEnum
+}
+
+input InputDeleteLoteAutoCalculate {
+  id: Int!
+}
+
+input InputNewAccountMetaTrader {
+  name: String!
+  password: String!
+  server: String!
+  balance: Int!
+  balanceCredit: Int!
+  accountNumber: Int!
+  userId: Int
+}
+
+input InputChangeAccountMetaTrader {
+  id: Int!
+  name: String
+  password: String
+  balance: Int
+  balanceCredit: Int
+}
+
+input InputDeleteAccountMetaTrader {
+  id: Int!
+}
+
+input InputStopWorkAccountMetaTrader {
+  id: Int!
+  status: AccountMetaTraderEnum!
+}
+
+enum AccountMetaTraderEnum {
+  WAIT_PAYMENT
+  WORK
+  DOCUMENT_SEND_INVALID
+  LATE_INVOICES
+  PROCESS
+  PAY_TO_ACTIVATE
+  STOP
+}
+
+input InputNewPlanInvoices {
+  beginDate: DateTime!
+  finishDate: DateTime!
+  realDollarQuote: Int!
+  accountNumber: Int
+  type: PlanInvoicesTypeEnum!
+}
+
+input InputUpdatePlanInvoices {
+  id: Int!
+  beginDate: DateTime
+  finishDate: DateTime
+  realDollarQuote: Int
+  grossProfitDollar: Int
+  accountNumber: Int
+  profitDollar: Int
+  affiliatedProfitDollar: Int
+  type: PlanInvoicesTypeEnum
+  status: PlanInvoicesStatusEnum
+}
+
+input InputNewtOrders {
+  par: String!
+  direction: OrdersDirectionEnum!
+  lote: Int!
+  ticket: Int!
+  local: String!
+  type: OrdersTypeEnum!
+  status: OrdersStatusEnum!
+}
+
+input InputUpdateOrders {
+  id: Int!
+  par: String
+  direction: OrdersDirectionEnum
+  lote: Int
+  ticket: Int
+  local: String
+  type: OrdersTypeEnum
+  status: OrdersStatusEnum
+}
+
+input InputDeleteOrders {
+  id: Int!
+}
+
+input InputNewtOrdersAccounts {
+  par: String!
+  direction: OrdersDirectionEnum!
+  lote: Int!
+  ticket: Int!
+  accountMetaTraderId: Int!
+  ordersId: Int!
+  local: String!
+  type: OrdersTypeEnum!
+  status: OrdersStatusEnum!
+}
+
+input InputUpdateOrdersAccounts {
+  id: Int!
+  par: String
+  direction: OrdersDirectionEnum
+  lote: Int
+  ticket: Int
+  local: String
+  type: OrdersTypeEnum
+  status: OrdersStatusEnum
+}
+
+input InputDeleteOrdersAccounts {
+  id: Int!
+}
+
+input InputOrdersAccountGroupDefinition {
+  id: Int
+  ordersId: Int
+  ticket: Int
+  par: String
+  direction: OrdersDirectionEnum
+  lote: Int
+  accountMetaTraderId: Int
+  local: String
+  type: OrdersTypeEnum
+  status: OrdersStatusEnum
+}
