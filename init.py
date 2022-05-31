@@ -21,10 +21,11 @@ while True:
     try:
 
         fd = getInfoDef()
+        print('all information ++>> ',fd)
         if fd:
             print('s')
             ativite_change = fd
-
+            data = []
             for profile in fd['ordersFilterAccount']:
                 print(profile)
 
@@ -40,18 +41,19 @@ while True:
                                                     login=account_n, server=profile['server'], password=profile['password'], timeout=25000)
 
                     if authorized:
-                        data = []
+                        
 
                         if profile['missingOrders']:
                             for orders in profile['missingOrders']:
                                 print('pre order :::> ', orders['direction'], orders['par'], float(
                                     orders['lote'])/100, 0, 0, 10)
-                                result, buy_request = open_trade(
-                                    orders['direction'], orders['par'], float(orders['lote'])/100, 0, 0, 10)
 
                                 if(orders['status'] == 'OPEN'):
 
-                                    if result != None:
+                                    result, buy_request = open_trade(
+                                        orders['direction'], orders['par'], float(orders['lote'])/100, 0, 0, 10)
+
+                                    if result is not None:
                                         data.append(create_Object(
                                             result, orders, 'OPEN'))
 
@@ -64,24 +66,25 @@ while True:
                                         print(' result close  ', result)
                                         print(
                                             '------------------------------------------------------  ')
-                                        if result:
+                                        if result is not None:
 
-                                            data.append(create_Object(
-                                                result, orders, 'CLOSE'))
-                                            print('rsdfsdfsdultsdf  ')
-
-                            result = setOrders(data)
-                            print('result   ', result)
-                        safe = 5
-
+                                            data.append(orders)
+                                            print('rsdfsdfsdultsdf  ')   
+                                    else:
+                                        data.append(orders)
                     else:
                         # FIXME report is wrong login
                         print(
                             "failed to connect at account #{}, error code: {}", mt5.last_error())
-
-                except Exception as inst:
+               
+                
+                except:
                     traceback.print_exc()
-                    print('E111rro ', inst)
-
+                    print('except init')
+            print('data server ', data)
+            result = setOrders(data)
+            
+            print('Result server ', result)
     except Exception as inst:
+        
         print('Erro ', inst)

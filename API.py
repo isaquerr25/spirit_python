@@ -2,27 +2,31 @@ import MetaTrader5 as mt5
 import time
 import traceback
 
-ea_magic_number = 9986989 # if you want to give every bot a unique identifier
+ea_magic_number = 9986989  # if you want to give every bot a unique identifier
+
 
 def get_info(symbol):
     '''https://www.mql5.com/en/docs/integration/python_metatrader5/mt5symbolinfo_py
     '''
     # get symbol properties
-    info=mt5.symbol_info(symbol)
+    info = mt5.symbol_info(symbol)
     return info
+
 
 def open_trade(action, symbol, lot, sl_points, tp_points, deviation):
     '''https://www.mql5.com/en/docs/integration/python_metatrader5/mt5ordersend_py
     '''
     # prepare the buy request structure
-    selected=mt5.symbol_select(symbol,True)
+    print('000000000')
+    selected = mt5.symbol_select(symbol, True)
     if not selected:
-        print(f"Failed to select {symbol}, error code =",mt5.last_error())
+        print(f"Failed to select {symbol}, error code =", mt5.last_error())
+        return None, None
     else:
         print('entro')
         try:
             price = mt5.symbol_info_tick(symbol).ask
-            
+
             buy_request = {
                 "action": mt5.TRADE_ACTION_DEAL,
                 "symbol": symbol,
@@ -33,27 +37,39 @@ def open_trade(action, symbol, lot, sl_points, tp_points, deviation):
                 "magic": 234000,
                 "comment": "python script open",
                 "type_time": mt5.ORDER_TIME_GTC,
-                "type_filling": mt5.ORDER_FILLING_RETURN,
-                }
-            
-            result = mt5.order_send(buy_request) 
-            return result, buy_request 
+            }
+
+            result = mt5.order_send(buy_request)
+            if result.retcode != mt5.TRADE_RETCODE_DONE:
+                print("order_send failed, retcode={}".format(result.retcode))
+                return None, None
+            else:
+                return result, buy_request
 
         except Exception as inst:
             traceback.print_exc()
             print(inst)
-            
-def close_trade(ticket, symbol):
+            return None, None
 
-    return mt5.Close(symbol,ticket=ticket)
-   
+
+def close_trade(ticket, symbol):
+    print('close_trade')
+    if(mt5.orders_get(ticket=ticket) is None):
+        return True
+    result = mt5.Close(symbol, ticket=ticket)
+    if result.retcode != mt5.TRADE_RETCODE_DONE:
+        print("orderClose failed, retcode={}".format(result.retcode))
+        return None
+    else:
+        return result
+
 # This is how I would execute the order
 
 
 def get_ticket_no(ticket):
-    
+
     # get the list of positions on symbols whose names contain "*EUR*"
-    symmbol_positions=mt5.positions_get()
+    symmbol_positions = mt5.positions_get()
     print('fo222222222222a')
     if symmbol_positions != None:
         print('forttewa')
@@ -72,7 +88,7 @@ def get_ticket_no(ticket):
 # terminal_info_dict = mt5.terminal_info()._asdict()
 # for prop in terminal_info_dict:
 #     print("  {}={}".format(prop, terminal_info_dict[prop]))
-    
+
 # print('passou um')
 # authorized = mt5.login(login=83000449, server="Exness-MT5Trial12",password="Peitoes97")
 
@@ -98,19 +114,19 @@ def get_ticket_no(ticket):
 
 
 def get_ticket_return_list(ticket):
-    
+
     # get the list of positions on symbols whose names contain "*EUR*"
-    symmbol_positions=mt5.positions_get()
-    if symmbol_positions==None:
-        print("No positions with group=\"*EUR*\", error code={}".format(mt5.last_error()))    
-    elif len(symmbol_positions)>0:
+    symmbol_positions = mt5.positions_get()
+    if symmbol_positions == None:
+        print("No positions with group=\"*EUR*\", error code={}".format(mt5.last_error()))
+    elif len(symmbol_positions) > 0:
         lst = list(symmbol_positions)
         for list_orders in lst:
-            if list_orders[0] == ticket:                
-                 return list_orders
+            if list_orders[0] == ticket:
+                return list_orders
     return 0
 
 
 def close_trade_by_ticket(by_ticket):
     print(by_ticket)
-    return (mt5.Close(by_ticket['par'] ,ticket= int(by_ticket['ticket']) ))
+    return (mt5.Close(by_ticket['par'], ticket=int(by_ticket['ticket'])))

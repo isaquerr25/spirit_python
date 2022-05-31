@@ -63,7 +63,6 @@ def getInfoDef():
 
 # send order to db
 
-
 def setOrders(data):
     try:
         result = client.execute(mutation, variable_values={
