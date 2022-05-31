@@ -16,15 +16,9 @@ query = gql(
       ordersFilterAccount(data:$data)
       {
         id
-        name
+        password
         server
         accountNumber
-        allCurrent
-        allCopyCurrent
-        finishDate
-        status
-        typeAccount
-        local
         missingOrders{
           id
           ordersId
