@@ -29,6 +29,7 @@ query = gql(
           local
           type
           accountMetaTraderId
+          status
         }
       }
     }
