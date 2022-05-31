@@ -25,7 +25,7 @@ while True:
             print('s')
             ativite_change = fd
 
-            for profile in fd['data']['ordersFilterAccount']:
+            for profile in fd['ordersFilterAccount']:
                 print(profile)
 
                 try:
