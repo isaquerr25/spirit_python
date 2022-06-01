@@ -48,6 +48,19 @@ mutation = gql(
     """
 )
 
+
+glqSetWrongAuthorized= gql(
+    """
+    mutation AccountMetaTraderUpdate($data:InputChangeAccountMetaTrader!) {
+        accountMetaTraderUpdate(data:$data)
+        {
+            field
+            message
+        }
+    }
+    """
+)
+
 # get all info need in server
 
 
@@ -64,6 +77,16 @@ def getInfoDef():
 # send order to db
 
 def setOrders(data):
+    try:
+        result = client.execute(mutation, variable_values={
+            "data": data})
+        return result
+    except:
+        print('setOrders error')
+        traceback.print_exc()
+        return None
+
+def setWrongAuthorized(data):
     try:
         result = client.execute(mutation, variable_values={
             "data": data})
