@@ -212,6 +212,7 @@ type Mutation {
   accountMetaTraderUpdate(data: InputChangeAccountMetaTrader!): GraphState
   accountMetaTraderDelete(data: InputDeleteAccountMetaTrader!): GraphState!
   accountMetaTraderStopWork(data: InputStopWorkAccountMetaTrader!): GraphState!
+  accountUpdatePython(data: InputAccountPython!): GraphState
   planInvoicesCreate(data: InputNewPlanInvoices!): [GraphState!]!
   planInvoicesUpdate(data: InputUpdatePlanInvoices!): [GraphState!]!
   ordersCreate(data: InputNewtOrders!): [GraphState!]!
@@ -326,6 +327,14 @@ enum AccountMetaTraderEnum {
   PROCESS
   PAY_TO_ACTIVATE
   STOP
+  ERRO_LOGIN
+}
+
+input InputAccountPython {
+  id: Int!
+  balance: Int
+  balanceCredit: Int
+  status: AccountMetaTraderEnum
 }
 
 input InputNewPlanInvoices {

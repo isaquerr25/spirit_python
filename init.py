@@ -6,7 +6,7 @@ from API import open_trade, close_trade, get_ticket_no, close_trade_by_ticket
 import requests
 import json
 import time
-from request_graphql import getInfoDef, setOrders
+from request_graphql import getInfoDef, setOrders, setWrongAuthorized
 from utils import create_Object
 import traceback
 local_mt = 'C:\Program Files\XM Global MT5/terminal64.exe'
@@ -21,7 +21,7 @@ while True:
     try:
 
         fd = getInfoDef()
-        print('all information ++>> ',fd)
+        print('all information ++>> ', fd)
         if fd:
             print('s')
             ativite_change = fd
@@ -41,7 +41,6 @@ while True:
                                                     login=account_n, server=profile['server'], password=profile['password'], timeout=25000)
 
                     if authorized:
-                        
 
                         if profile['missingOrders']:
                             for orders in profile['missingOrders']:
@@ -69,23 +68,23 @@ while True:
                                         if result is not None:
 
                                             data.append(orders)
-                                            print('rsdfsdfsdultsdf  ')   
+                                            print('rsdfsdfsdultsdf  ')
                                     else:
                                         data.append(orders)
                     else:
                         # FIXME report is wrong login
-                        
+                        setWrongAuthorized(
+                            {'id': profile['id'], 'status': 'ERROR_LOGIN'})
                         print(
                             "failed to connect at account #{}, error code: {}", mt5.last_error())
-               
-                
+
                 except:
                     traceback.print_exc()
                     print('except init')
             print('data server ', data)
             result = setOrders(data)
-            
+
             print('Result server ', result)
     except Exception as inst:
-        
+
         print('Erro ', inst)
