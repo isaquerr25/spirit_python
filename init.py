@@ -52,10 +52,15 @@ while True:
                                     result, buy_request = open_trade(
                                         orders['direction'], orders['par'], float(orders['lote'])/100, 0, 0, 10)
 
-                                    if result is not None:
+                                    if result =='error symbol':
+                                        setWrongAuthorized({'id': profile['id'], 'status': 'NOT_HAVE_ORDER_NAME_LOCAL_REFERENCE'})
+
+
+                                    elif result is not None:
                                         data.append(create_Object(
                                             result, orders, 'OPEN'))
 
+                                    
                                 elif(orders['status'] == 'CLOSE'):
 
                                     if get_ticket_no(int(orders['ticket'])) != 0:

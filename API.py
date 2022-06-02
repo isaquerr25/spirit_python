@@ -21,7 +21,8 @@ def open_trade(action, symbol, lot, sl_points, tp_points, deviation):
     selected = mt5.symbol_select(symbol, True)
     if not selected:
         print(f"Failed to select {symbol}, error code =", mt5.last_error())
-        return None, None
+
+        return 'error symbol', None
     else:
         print('entro')
         try:
@@ -57,8 +58,9 @@ def close_trade(ticket, symbol):
     if(mt5.orders_get(ticket=ticket) is None):
         return True
     result = mt5.Close(symbol, ticket=ticket)
-    if result.retcode != mt5.TRADE_RETCODE_DONE:
-        print("orderClose failed, retcode={}".format(result.retcode))
+    print(result)
+    if not result:
+        print("orderClose failed, retcode={}".format(ticket))
         return None
     else:
         return result

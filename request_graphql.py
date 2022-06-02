@@ -98,7 +98,6 @@ def setWrongAuthorized(data):
         traceback.print_exc()
         return None
 
-print(setWrongAuthorized({'id': 2, 'status': 'ERROR_LOGIN'}))
 
 
 # Scheme to send to create new order in db
