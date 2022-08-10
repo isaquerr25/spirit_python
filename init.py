@@ -9,12 +9,12 @@ import time
 from request_graphql import getInfoDef, setOrders, setWrongAuthorized
 from utils import create_Object
 import traceback
-local_mt = 'C:\Program Files\XM Global MT5/terminal64.exe'
+local_mt = 'C:\Program Files\MetaTrader5-1/terminal64.exe'
 print('load all')
 ativite_change = ''
 account_n = ''
 test = mt5.initialize(path=r''+local_mt, login=0, server='tes', password='tes')
-
+print('connect,',test )
 while True:
     time.sleep(5)
 
