@@ -29,6 +29,3 @@ def workCashIn(mt5, local, local_mt):
             print("Total history orders=", history_orders)
         else:
             print("Orders not found in history")
-
-
-workCashIn('mt5', envFile['addressApi'], 'local_mt')
