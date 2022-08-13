@@ -8,16 +8,21 @@ import json
 import time
 from request_graphql import getInfoDef, setOrders, setWrongAuthorized
 from utils import create_Object
+from cashIn import workCashIn
 import traceback
 local_mt = 'C:\Program Files\MetaTrader5-1/terminal64.exe'
 print('load all')
 ativite_change = ''
 account_n = ''
 test = mt5.initialize(path=r''+local_mt, login=0, server='tes', password='tes')
-print('connect,',test )
+print('connect,', test)
+envFile = ''
+with open('env.json') as json_file:
+    envFile = json.load(json_file)
+
 while True:
     time.sleep(5)
-
+    workCashIn(mt5, envFile['addressApi'], local_mt)
     try:
 
         fd = getInfoDef()
@@ -52,15 +57,14 @@ while True:
                                     result, buy_request = open_trade(
                                         orders['direction'], orders['par'], float(orders['lote'])/100, 0, 0, 10)
 
-                                    if result =='error symbol':
-                                        setWrongAuthorized({'id': profile['id'], 'status': 'NOT_HAVE_ORDER_NAME_LOCAL_REFERENCE'})
-
+                                    if result == 'error symbol':
+                                        setWrongAuthorized(
+                                            {'id': profile['id'], 'status': 'NOT_HAVE_ORDER_NAME_LOCAL_REFERENCE'})
 
                                     elif result is not None:
                                         data.append(create_Object(
                                             result, orders, 'OPEN'))
 
-                                    
                                 elif(orders['status'] == 'CLOSE'):
 
                                     if get_ticket_no(int(orders['ticket'])) != 0:

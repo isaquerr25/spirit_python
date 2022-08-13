@@ -49,9 +49,39 @@ mutation = gql(
 )
 
 
+planInvoiceLocalPython = gql(
+    """
+    query PlanInvoiceLocalPython($data:[String!]!) {
+        planInvoiceLocalPython(
+            data: {
+        local:$data
+        }){
+            PlanInvoices{
+                    id
+                    beginDate
+                    finishDate
+                    realDollarQuote
+                    local
+                    status
+                    type
+                    grossProfitDollar
+                    createdAt
+                }
+                AccountMetaTrader{
+                    id
+                    name
+                    password
+                    accountNumber
+                    server   
+            }
+        }
+    }
+    """
+)
+
 glqSetWrongAuthorized = gql(
     """
-    mutation AccountUpdatePython($data:InputAccountPython!) {
+    query AccountUpdatePython($data:InputAccountPython!) {
         accountUpdatePython(data:$data)
         {
             field
@@ -61,7 +91,20 @@ glqSetWrongAuthorized = gql(
     """
 )
 
+
 # get all info need in server
+
+
+def getPlanInvoice(info):
+    try:
+        result = client.execute(planInvoiceLocalPython, variable_values={
+            "data": info
+        })
+        return result['planInvoiceLocalPython']
+    except:
+        print('getPlanInvoice error')
+        traceback.print_exc()
+        return None
 
 
 def getInfoDef():
@@ -97,7 +140,6 @@ def setWrongAuthorized(data):
         print('setOrders error')
         traceback.print_exc()
         return None
-
 
 
 # Scheme to send to create new order in db
