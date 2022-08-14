@@ -32,6 +32,7 @@ def workCashIn(mt5, local, local_mt):
         else:
             print("Orders not found in history")
 
+        print(from_date, to_date)
         deals = mt5.history_deals_get(from_date, to_date)
 
         if deals == None:
