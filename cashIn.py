@@ -44,5 +44,5 @@ def workCashIn(mt5, local, local_mt):
 
                 if x.magic == envFile['magicNumber']:
                     valueProfit += x.profit
-                    print('Item => ', x)
+                    print('Item => ', x.profit)
             print('valueProfit => ', valueProfit)
