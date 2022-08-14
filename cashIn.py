@@ -43,11 +43,8 @@ def workCashIn(mt5, local, local_mt):
             for x in deals:
                 print('Item => ', x)
                 print('profit => ', x.profit)
-                x = ((str(x)).replace('TradeDeal', '').replace(
-                    '=', ':').replace('(', '{').replace(')', '}'))
-                x = json.load(x)
-                print(x)
-                if x['magic'] == envFile['magicNumber']:
-                    valueProfit += x['profit']
+
+                if x.magic == envFile['magicNumber']:
+                    valueProfit += x.profit
                     print(x)
             print('valueProfit => ', valueProfit)
