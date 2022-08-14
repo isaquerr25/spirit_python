@@ -41,6 +41,7 @@ def workCashIn(mt5, local, local_mt):
 
             valueProfit = 0
             for time in deals:
+                print('time => ', time['magic'])
                 if time['magic'] == envFile['magicNumber']:
                     valueProfit += time['profit']
                     print(time)
