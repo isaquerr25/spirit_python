@@ -22,7 +22,7 @@ with open('env.json') as json_file:
 
 while True:
     time.sleep(5)
-    workCashIn(mt5, envFile['addressApi'], local_mt)
+    workCashIn(mt5, envFile['localReference']['local'], local_mt)
     try:
 
         fd = getInfoDef()
