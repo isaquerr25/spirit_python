@@ -15,7 +15,7 @@ print('load all')
 ativite_change = ''
 account_n = ''
 test = mt5.initialize(path=r''+local_mt, login=0, server='tes', password='tes')
-print('connect,', test)
+
 envFile = ''
 with open('env.json') as json_file:
     envFile = json.load(json_file)
@@ -23,6 +23,7 @@ with open('env.json') as json_file:
 while True:
     time.sleep(5)
     workCashIn(mt5, envFile['localReference']['local'], local_mt)
+
     try:
 
         fd = getInfoDef()
