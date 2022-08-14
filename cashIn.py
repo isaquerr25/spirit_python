@@ -1,4 +1,4 @@
-from request_graphql import getInfoDef, setOrders, setWrongAuthorized, getPlanInvoice
+from request_graphql import getPlanInvoice
 from datetime import datetime
 import json
 with open('env.json') as json_file:

@@ -56,23 +56,27 @@ planInvoiceLocalPython = gql(
             data: {
         local:$data
         }){
+            id
+            status
             PlanInvoices{
-                    id
-                    beginDate
-                    finishDate
-                    realDollarQuote
-                    local
-                    status
-                    type
-                    grossProfitDollar
-                    createdAt
-                }
-                AccountMetaTrader{
-                    id
-                    name
-                    password
-                    accountNumber
-                    server   
+                id
+                beginDate
+                finishDate
+                realDollarQuote
+                local
+                status
+                type
+                grossProfitDollar
+                createdAt
+            
+            }
+            AccountMetaTrader{
+                id
+                name
+                password
+                accountNumber
+                server
+                local
             }
         }
     }
