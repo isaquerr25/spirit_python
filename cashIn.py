@@ -7,6 +7,7 @@ with open('env.json') as json_file:
 
 def workCashIn(mt5, local, local_mt):
     print('------------------------------------------------------rodo--------------------------------------------------------')
+    print('getPlanInvoice=>', getPlanInvoice(local))
     for item in getPlanInvoice(local):
         print(item['PlanInvoices'])
         print(item['AccountMetaTrader'])
