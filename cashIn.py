@@ -31,3 +31,17 @@ def workCashIn(mt5, local, local_mt):
             print("Total history orders=", history_orders)
         else:
             print("Orders not found in history")
+
+        deals = mt5.history_deals_get(from_date, to_date)
+
+        if deals == None:
+            print("No deals, error code={}".format(mt5.last_error()))
+
+        elif len(deals) > 0:
+
+            valueProfit = 0
+            for time in deals:
+                if time['magic'] == envFile['magicNumber']:
+                    valueProfit += time['profit']
+                    print(time)
+            print('valueProfit => ', valueProfit)

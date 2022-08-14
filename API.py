@@ -1,8 +1,9 @@
 import MetaTrader5 as mt5
 import time
+import json
 import traceback
-
-ea_magic_number = 9986989  # if you want to give every bot a unique identifier
+with open('env.json') as json_file:
+    envFile = json.load(json_file)
 
 
 def get_info(symbol):
@@ -35,7 +36,7 @@ def open_trade(action, symbol, lot, sl_points, tp_points, deviation):
                 "type": mt5.ORDER_TYPE_BUY if action == 'BUY' else mt5.ORDER_TYPE_SELL,
                 "price": price,
                 "deviation": deviation,
-                "magic": 234000,
+                "magic": envFile['magicNumber'],
                 "comment": "python script open",
                 "type_time": mt5.ORDER_TIME_GTC,
             }
