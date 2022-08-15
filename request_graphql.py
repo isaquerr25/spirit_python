@@ -11,7 +11,7 @@ with open('env.json') as json_file:
 
 transport = AIOHTTPTransport(url=envFile['addressApi'])
 client = Client(transport=transport, fetch_schema_from_transport=True)
-query = gql(
+ordersFilterAccount = gql(
     """
     query OrdersFilterAccount($data:ObjectFilterAccountOrders!) {
       ordersFilterAccount(data:$data)
@@ -151,8 +151,8 @@ def getPlanInvoice(info):
 
 def getInfoDef():
     try:
-        result = client.execute(query, variable_values={
-            "data": envFile['localReference']})
+        result = client.execute(ordersFilterAccount, variable_values={
+            "data": envFile['localReference']['local']})
         return result
     except:
         print('getInfoDef error')
