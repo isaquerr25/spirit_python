@@ -119,13 +119,14 @@ glqSetWrongAuthorized = gql(
 # get all info need in server
 
 def getInvoiceCreateStaff(idPlanToAccount, accountNumber, profit, capital, planInvoicesId):
-    print(idPlanToAccount, accountNumber, profit, capital, planInvoicesId)
+    print(idPlanToAccount, accountNumber, math.floor(
+        profit * 100), math.floor(capital*100), planInvoicesId)
     try:
         result = client.execute(invoiceCreateStaff, variable_values={
             "idPlanToAccount": idPlanToAccount,
             "accountNumber": accountNumber,
-            "profit": profit,
-            "capital": capital,
+            "profit": math.floor(profit * 100),
+            "capital": math.floor(capital*100),
             "planInvoicesId": planInvoicesId,
         })
         return result
