@@ -119,6 +119,7 @@ glqSetWrongAuthorized = gql(
 # get all info need in server
 
 def getInvoiceCreateStaff(idPlanToAccount, accountNumber, profit, capital, planInvoicesId):
+    print(idPlanToAccount, accountNumber, profit, capital, planInvoicesId)
     try:
         result = client.execute(invoiceCreateStaff, variable_values={
             "idPlanToAccount": idPlanToAccount,
