@@ -52,6 +52,6 @@ def workCashIn(mt5, local, local_mt):
                 item['id'],
                 item['AccountMetaTrader']['accountNumber'],
                 valueProfit,
-                mt5.balance,
+                mt5.account_info().balance,
                 item['PlanInvoices']['id'])
             )
