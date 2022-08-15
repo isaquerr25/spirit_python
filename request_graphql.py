@@ -83,6 +83,26 @@ planInvoiceLocalPython = gql(
     """
 )
 
+invoiceCreateStaff = gql(
+    """
+    mutation InvoiceCreateStaff($idPlanToAccount:Int,$accountNumber:Int,$profit:Int!,$capital:Int!,$planInvoicesId:Int) {
+        invoiceCreateStaff(
+		res: {
+            idPlanToAccount:$idPlanToAccount
+			accountNumber: $accountNumber
+			profit: $profit
+			capital: $capital
+			planInvoicesId: $planInvoicesId
+		}
+	) {
+		field
+		message
+	    }
+    }
+    """
+)
+
+
 glqSetWrongAuthorized = gql(
     """
     query AccountUpdatePython($data:InputAccountPython!) {
@@ -97,6 +117,21 @@ glqSetWrongAuthorized = gql(
 
 
 # get all info need in server
+
+def getInvoiceCreateStaff(idPlanToAccount, accountNumber, profit, capital, planInvoicesId):
+    try:
+        result = client.execute(invoiceCreateStaff, variable_values={
+            "idPlanToAccount": idPlanToAccount,
+            "accountNumber": accountNumber,
+            "profit": profit,
+            "capital": capital,
+            "planInvoicesId": planInvoicesId,
+        })
+        return result
+    except:
+        print('getPlanInvoice error')
+        traceback.print_exc()
+        return None
 
 
 def getPlanInvoice(info):

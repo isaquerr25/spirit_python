@@ -33,7 +33,7 @@ def workCashIn(mt5, local, local_mt):
             print("Orders not found in history")
 
         print(from_date, to_date)
-        deals = mt5.history_deals_get(from_date, to_date)
+        deals = authorized.history_deals_get(from_date, to_date)
 
         if deals == None:
             print("No deals, error code={}".format(mt5.last_error()))
@@ -44,7 +44,14 @@ def workCashIn(mt5, local, local_mt):
             for x in deals:
                 if x.volume != 0:
                     valueProfit += x.profit
-                    print('Item => ', x.profit, " /magic =>",x.magic)
-                    if x.profit > 1000 :
+                    print('Item => ', x.profit, " /magic =>", x.magic)
+                    if x.profit > 1000:
                         print('Item => ', x)
             print('valueProfit => ', valueProfit)
+            print(getInvoiceCreateStaff(
+                item['id'],
+                item['AccountMetaTrader']['accountNumber'],
+                valueProfit,
+                authorized.balance,
+                item['PlanInvoices']['id'])
+            )
