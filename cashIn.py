@@ -42,8 +42,9 @@ def workCashIn(mt5, local, local_mt):
 
             valueProfit = 0
             for x in deals:
-
-                if x.magic == envFile['magicNumber']:
+                if x.volume != 0:
                     valueProfit += x.profit
-                    print('Item => ', x.profit)
+                    print('Item => ', x.profit, " /magic =>",x.magic)
+                    if x.profit > 1000 :
+                        print('Item => ', x)
             print('valueProfit => ', valueProfit)
