@@ -152,7 +152,7 @@ def getPlanInvoice(info):
 def getInfoDef():
     try:
         result = client.execute(ordersFilterAccount, variable_values={
-            "data": envFile['localReference']['local']})
+            "data": envFile['localReference']})
         return result
     except:
         print('getInfoDef error')
