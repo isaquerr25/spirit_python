@@ -3,6 +3,7 @@ from gql import Client, gql
 import os
 import json
 import traceback
+import math
 envFile = ''
 with open('env.json') as json_file:
     envFile = json.load(json_file)
