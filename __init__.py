@@ -1,6 +1,5 @@
 from request_graphql import getInfoDef, setOrders, setWrongAuthorized, getPlanInvoice
+import time
 
-
-for item in getPlanInvoice('pato'):
-    print(item['PlanInvoices'])
-    print(item['AccountMetaTrader'])
+fd = getInfoDef()
+print('all information ++>> ', fd)
