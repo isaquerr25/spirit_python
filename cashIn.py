@@ -1,4 +1,4 @@
-from request_graphql import getPlanInvoice
+from request_graphql import getPlanInvoice, getInvoiceCreateStaff
 from datetime import datetime
 import json
 with open('env.json') as json_file:
@@ -33,7 +33,7 @@ def workCashIn(mt5, local, local_mt):
             print("Orders not found in history")
 
         print(from_date, to_date)
-        deals = authorized.history_deals_get(from_date, to_date)
+        deals = mt5.history_deals_get(from_date, to_date)
 
         if deals == None:
             print("No deals, error code={}".format(mt5.last_error()))
@@ -52,6 +52,6 @@ def workCashIn(mt5, local, local_mt):
                 item['id'],
                 item['AccountMetaTrader']['accountNumber'],
                 valueProfit,
-                authorized.balance,
+                mt5.balance,
                 item['PlanInvoices']['id'])
             )
